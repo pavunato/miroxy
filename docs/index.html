@@ -311,7 +311,7 @@
       <p>A tiny, stateless proxy relay that runs on a Raspberry Pi. Forward any HTTP request to any API — one binary, zero config.</p>
 
       <div class="install-box">
-        <code><span class="prompt">$</span> <span class="cmd">curl -fsSL https://miroxy.app/install.sh | sh</span></code>
+        <code><span class="prompt">$</span> <span class="cmd" data-url>curl -fsSL https://miroxy.app/install.sh | sh</span></code>
         <button class="copy-btn" onclick="copyInstall()">Copy</button>
       </div>
     </section>
@@ -424,12 +424,20 @@
   </footer>
 
   <script>
+    const BASE_URL = 'https://pavunato.github.io/miroxy';
+    
     function copyInstall() {
-      navigator.clipboard.writeText('curl -fsSL https://miroxy.app/install.sh | sh');
+      navigator.clipboard.writeText(`curl -fsSL ${BASE_URL}/install.sh | sh`);
       const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy', 2000);
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-url]').forEach(el => {
+        el.textContent = el.textContent.replace('https://miroxy.app', BASE_URL);
+      });
+    });
   </script>
 </body>
 </html>
