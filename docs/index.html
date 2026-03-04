@@ -64,6 +64,15 @@
       background-clip: text;
     }
 
+    .hero .tagline {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
     .hero p {
       font-size: 18px;
       color: var(--muted);
@@ -298,6 +307,7 @@
     <section class="hero">
       <div class="hero-badge">Open Source</div>
       <h1><span>miroxy</span></h1>
+      <p class="tagline">Micro Relay Proxy</p>
       <p>A tiny, stateless proxy relay that runs on a Raspberry Pi. Forward any HTTP request to any API — one binary, zero config.</p>
 
       <div class="install-box">
