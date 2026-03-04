@@ -1,0 +1,32 @@
+version: 2
+
+builds:
+  - binary: miroxy
+    ldflags:
+      - -s -w
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - "6"
+    ignore:
+      - goos: darwin
+        goarch: arm
+
+archives:
+  - format: binary
+    name_template: "miroxy-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+
+release:
+  github:
+    owner: viptony
+    name: miroxy
+
+checksum:
+  name_template: "checksums.txt"

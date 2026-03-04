@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miroxy — Lightweight Proxy Relay</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a2e;
+      --muted: #64748b;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --code-bg: #1e1e2e;
+      --code-text: #cdd6f4;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 48px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+
+    /* Install box */
+    .install-box {
+      background: var(--code-bg);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 0 auto 48px;
+      max-width: 560px;
+      position: relative;
+    }
+
+    .install-box code {
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--code-text);
+      word-break: break-all;
+    }
+
+    .install-box .prompt { color: #a6e3a1; }
+    .install-box .cmd { color: #cdd6f4; }
+
+    .copy-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+
+    /* Flow diagram */
+    .flow {
+      text-align: center;
+      padding: 32px 0 48px;
+    }
+
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .flow-node {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .flow-node.accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      border: none;
+    }
+
+    .flow-arrow {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .flow p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding-bottom: 48px;
+    }
+
+    .feature {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .feature h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .feature p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Usage */
+    .usage {
+      padding-bottom: 48px;
+    }
+
+    .usage h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--code-text);
+      line-height: 1.7;
+    }
+
+    .code-block .comment { color: #6c7086; }
+    .code-block .string { color: #a6e3a1; }
+    .code-block .key { color: #89b4fa; }
+
+    .code-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* CLI flag */
+    .cli-section {
+      padding-bottom: 48px;
+    }
+
+    .cli-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .flag-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .flag-table th,
+    .flag-table td {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+
+    .flag-table th {
+      background: var(--bg);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+
+    .flag-table td:first-child {
+      font-family: 'SF Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .flag-table tr + tr td { border-top: 1px solid var(--border); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 36px; }
+      .features { grid-template-columns: 1fr; }
+      .flow-diagram { gap: 4px; }
+      .flow-node { padding: 8px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-badge">Open Source</div>
+      <h1><span>miroxy</span></h1>
+      <p>A tiny, stateless proxy relay that runs on a Raspberry Pi. Forward any HTTP request to any API — one binary, zero config.</p>
+
+      <div class="install-box">
+        <code><span class="prompt">$</span> <span class="cmd">curl -fsSL https://miroxy.app/install.sh | sh</span></code>
+        <button class="copy-btn" onclick="copyInstall()">Copy</button>
+      </div>
+    </section>
+
+    <section class="flow">
+      <div class="flow-diagram">
+        <div class="flow-node">Client</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">Cloudflare Tunnel</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node accent">miroxy</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">3rd Party API</div>
+      </div>
+      <p>Hide API keys, aggregate endpoints, proxy from the edge.</p>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <div class="feature-icon">&#9889;</div>
+        <h3>5MB Binary</h3>
+        <p>Pure Go, zero dependencies. Runs on Raspberry Pi Zero 2 W with room to spare.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#128274;</div>
+        <h3>Token Auth</h3>
+        <p>Optional bearer token to protect your proxy endpoint. Set one env var and you're done.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#128640;</div>
+        <h3>Stateless</h3>
+        <p>No config files, no database. Send a POST with URL, headers, body — get the response back.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#127760;</div>
+        <h3>Full Control</h3>
+        <p>Set method, headers, body, and timeout per request. Transform anything on the fly.</p>
+      </div>
+    </section>
+
+    <section class="usage">
+      <h2>Usage</h2>
+
+      <div class="code-label">Request</div>
+      <div class="code-block">
+<pre>curl -X POST http://localhost:8080/proxy \
+  -H <span class="string">'Content-Type: application/json'</span> \
+  -d <span class="string">'{
+    <span class="key">"method"</span>: "GET",
+    <span class="key">"url"</span>: "https://api.example.com/data",
+    <span class="key">"headers"</span>: {
+      "Authorization": "Bearer sk-xxx"
+    },
+    <span class="key">"timeout"</span>: 30
+  }'</span></pre>
+      </div>
+
+      <div class="code-label">Response</div>
+      <div class="code-block">
+<pre><span class="comment">// The upstream API response is streamed back directly</span>
+<span class="comment">// Status code, headers, and body are all forwarded as-is</span>
+{
+  <span class="key">"data"</span>: <span class="string">"from the 3rd party API"</span>
+}</pre>
+      </div>
+    </section>
+
+    <section class="cli-section">
+      <h2>Options</h2>
+      <table class="flag-table">
+        <tr>
+          <th>Flag / Env</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+        <tr>
+          <td>--port</td>
+          <td>Port to listen on</td>
+          <td>8080</td>
+        </tr>
+        <tr>
+          <td>--token</td>
+          <td>Bearer token for auth</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>MIROXY_ADDR</td>
+          <td>Listen address (env var)</td>
+          <td>:8080</td>
+        </tr>
+        <tr>
+          <td>MIROXY_TOKEN</td>
+          <td>Bearer token (env var)</td>
+          <td>—</td>
+        </tr>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>
+        <a href="https://github.com/viptony/miroxy">GitHub</a>
+        &nbsp;&middot;&nbsp;
+        MIT License
+        &nbsp;&middot;&nbsp;
+        Built for tiny devices
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText('curl -fsSL https://miroxy.app/install.sh | sh');
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    }
+  </script>
+</body>
+</html>
