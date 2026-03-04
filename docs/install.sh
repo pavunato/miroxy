@@ -52,14 +52,19 @@ if [ "${MIROXY_SKIP_SURVEY:-}" = "1" ]; then
     exit 0
 fi
 
-# Interactive setup
+# Interactive setup — read from /dev/tty so it works with curl | sh
 echo ""
-printf "  Which port should miroxy listen on? [8080]: "
-read -r PORT
-PORT=${PORT:-8080}
+if [ -t 0 ] || [ -e /dev/tty ]; then
+    printf "  Which port should miroxy listen on? [8080]: "
+    read -r PORT </dev/tty || PORT=""
+    PORT=${PORT:-8080}
 
-printf "  Set a bearer token for auth? (leave empty to skip): "
-read -r TOKEN
+    printf "  Set a bearer token for auth? (leave empty to skip): "
+    read -r TOKEN </dev/tty || TOKEN=""
+else
+    PORT=8080
+    TOKEN=""
+fi
 
 echo ""
 
