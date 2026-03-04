@@ -3,6 +3,7 @@ package proxy
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -61,15 +62,21 @@ func Handler(token string) http.HandlerFunc {
 			upstream.Header.Set(k, v)
 		}
 
+		start := time.Now()
 		client := &http.Client{Timeout: timeout}
 		resp, err := client.Do(upstream)
+		duration := time.Since(start)
+
 		if err != nil {
+			log.Printf("[PROXY] %s %s -> ERROR %s (%s)", req.Method, req.URL, err.Error(), duration)
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadGateway)
 			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 			return
 		}
 		defer resp.Body.Close()
+
+		log.Printf("[PROXY] %s %s -> %d (%s)", req.Method, req.URL, resp.StatusCode, duration)
 
 		// Copy upstream response headers
 		for k, vals := range resp.Header {

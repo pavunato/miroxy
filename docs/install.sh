@@ -40,6 +40,18 @@ fi
 
 echo "=> Installed miroxy to ${INSTALL_DIR}/miroxy"
 
+# Skip survey on self-update (miroxy --update)
+if [ "${MIROXY_SKIP_SURVEY:-}" = "1" ]; then
+    # Restart service if running
+    if [ "$OS" = "linux" ] && command -v systemctl >/dev/null 2>&1 && systemctl is-active "${SERVICE_NAME}" >/dev/null 2>&1; then
+        $SUDO systemctl restart "${SERVICE_NAME}"
+        echo "=> miroxy service restarted"
+    fi
+    echo "=> Update complete!"
+    miroxy --version 2>/dev/null || true
+    exit 0
+fi
+
 # Interactive setup
 echo ""
 printf "  Which port should miroxy listen on? [8080]: "
