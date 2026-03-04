@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-REPO="viptony/miroxy"
+REPO="pavunato/miroxy"
 INSTALL_DIR="/usr/local/bin"
 SERVICE_NAME="miroxy"
 

@@ -25,7 +25,7 @@ archives:
 
 release:
   github:
-    owner: viptony
+    owner: pavunato
     name: miroxy
 
 checksum:
